@@ -1,26 +1,24 @@
-from traitlets import Unicode
+import pandas as pd
 
-from jupyterhub.auth import Authenticator
+dataset=pd.read_csv('users.csv')
+password=dataset.iloc[:,1].values
+username=dataset.iloc[:,0].values
 
-from tornado import gen
+test_user=raw_input('Username')
+test_password=raw_input('Password')
+p=0
+i=0
+for i in username:
+    if test_user == username[i]:
+        if test_password == password[i]:
+            p=1
+            
+     
+if p == 0:
+    print("Incorrect username and password,Sign Up for free!!")
+else:
+    print("Welcome!!")
 
 
-class DummyAuthenticator(Authenticator):
-    password = Unicode(
-        None,
-        allow_none=True,
-        config=True,
-        help="""
-        Set a global password for all users wanting to log in.
-
-        This allows users with any username to log in with the same static password.
-        """
-    )
-
-    @gen.coroutine
-    def authenticate(self, handler, data):
-        if self.password:
-            if data['password'] == self.password:
-                return data['username']
-            return None
-        return data['username']
+            
+    
